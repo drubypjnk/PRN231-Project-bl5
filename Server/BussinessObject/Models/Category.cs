@@ -13,7 +13,7 @@ namespace BussinessObject.Models
         public int CategoryId { get; set; }
         public string? Name { get; set; }
         public string? Desc { get; set; }
-        public string? DeleteFlag { get; set; }
+        public bool? DeleteFlag { get; set; }
         public int PositionId { get; set; }
 
         public virtual ICollection<Product> Products { get; set; }

@@ -44,7 +44,7 @@ namespace BussinessObject.Models
             modelBuilder.Entity<Activity>(entity =>
             {
                 entity.HasKey(e => e.HistoryId)
-                    .HasName("PK__Activity__096AA2E916FFEACB");
+                    .HasName("PK__Activity__096AA2E90EB67B52");
 
                 entity.ToTable("Activity");
 
@@ -77,9 +77,7 @@ namespace BussinessObject.Models
 
                 entity.Property(e => e.CategoryId).HasColumnName("category_id");
 
-                entity.Property(e => e.DeleteFlag)
-                    .HasColumnType("text")
-                    .HasColumnName("delete_flag");
+                entity.Property(e => e.DeleteFlag).HasColumnName("delete_flag");
 
                 entity.Property(e => e.Desc)
                     .HasColumnType("text")
