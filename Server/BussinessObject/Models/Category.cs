@@ -16,6 +16,7 @@ namespace BussinessObject.Models
         public bool? DeleteFlag { get; set; }
         public int PositionId { get; set; }
 
+        public virtual Position Position { get; set; } = null!;
         public virtual ICollection<Product> Products { get; set; }
     }
 }

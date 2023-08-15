@@ -7,6 +7,7 @@ namespace BussinessObject.Models
     {
         public Position()
         {
+            Categories = new HashSet<Category>();
             SubPositions = new HashSet<SubPosition>();
         }
 
@@ -15,6 +16,7 @@ namespace BussinessObject.Models
         public string? Desc { get; set; }
         public bool? DeleteFlag { get; set; }
 
+        public virtual ICollection<Category> Categories { get; set; }
         public virtual ICollection<SubPosition> SubPositions { get; set; }
     }
 }

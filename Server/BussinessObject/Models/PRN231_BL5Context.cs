@@ -35,7 +35,7 @@ namespace BussinessObject.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=localhost,1433;Initial Catalog=PRN231_BL5;User ID=sa;Password=123456");
+                optionsBuilder.UseSqlServer("Data Source=localhost,1433;Initial Catalog=PRN231_BL5;User ID=sa;Password=123");
             }
         }
 
@@ -44,7 +44,7 @@ namespace BussinessObject.Models
             modelBuilder.Entity<Activity>(entity =>
             {
                 entity.HasKey(e => e.HistoryId)
-                    .HasName("PK__Activity__096AA2E90EB67B52");
+                    .HasName("PK__Activity__096AA2E9C0CB0F13");
 
                 entity.ToTable("Activity");
 
@@ -88,6 +88,12 @@ namespace BussinessObject.Models
                     .HasColumnName("name");
 
                 entity.Property(e => e.PositionId).HasColumnName("position_id");
+
+                entity.HasOne(d => d.Position)
+                    .WithMany(p => p.Categories)
+                    .HasForeignKey(d => d.PositionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Category__positi__5070F446");
             });
 
             modelBuilder.Entity<Note>(entity =>
@@ -256,6 +262,10 @@ namespace BussinessObject.Models
                 entity.Property(e => e.DeleteFlag).HasColumnName("delete_flag");
 
                 entity.Property(e => e.ProductId).HasColumnName("product_id");
+
+                entity.Property(e => e.ProductName)
+                    .HasMaxLength(50)
+                    .HasColumnName("product_name");
 
                 entity.Property(e => e.Quality).HasColumnName("quality");
 
