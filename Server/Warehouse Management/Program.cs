@@ -1,5 +1,12 @@
-var builder = WebApplication.CreateBuilder(args);
+using BussinessObject.Models;
+using Microsoft.EntityFrameworkCore;
+using Repositories;
 
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<PRN231_BL5Context>(
+    opt => opt.UseSqlServer(
+        builder.Configuration.GetConnectionString("DB"))
+    );
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -7,7 +14,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
+
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
