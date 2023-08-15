@@ -14,6 +14,8 @@
          <link href="https://nightly.datatables.net/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
       <!-- Boxiocns CDN Link -->
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+        @*font-awesome*@
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <header>
@@ -47,28 +49,26 @@
                       <span class="logo_name">CodingLab</span>
                     </div>
                     <ul class="nav-links">
-                      <li>
+                    @*  <li>
                         <a href="#">
                           <i class='bx bx-grid-alt' ></i>
                           <span class="link_name">Dashboard</span>
                         </a>
                         <ul class="sub-menu blank">
-                          <li><a class="link_name" href="#">Category</a></li>
+                          <li><a class="link_name" href="/sku/list">SKU</a></li>
                         </ul>
-                      </li>
+                      </li>*@
                       <li>
                         <div class="iocn-link">
-                          <a href="#">
+                          <a href="/sku/list">
                             <i class='bx bx-collection' ></i>
-                            <span class="link_name">Category</span>
+                            <span class="link_name">SKUs</span>
                           </a>
                           <i class='bx bxs-chevron-down arrow' ></i>
                         </div>
                         <ul class="sub-menu">
-                          <li><a class="link_name" href="#">Category</a></li>
-                          <li><a href="#">HTML & CSS</a></li>
-                          <li><a href="#">JavaScript</a></li>
-                          <li><a href="#">PHP & MySQL</a></li>
+                          <li><a class="link_name" href="/sku/list">SKUs Manager</a></li>
+                          <li><a href="#">Create SKU</a></li>
                         </ul>
                       </li>
                       <li>

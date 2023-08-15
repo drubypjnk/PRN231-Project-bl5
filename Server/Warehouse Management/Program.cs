@@ -1,6 +1,7 @@
 using BussinessObject.Models;
 using Microsoft.EntityFrameworkCore;
 using Repositories;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<PRN231_BL5Context>(
@@ -14,8 +15,29 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    options.JsonSerializerOptions.WriteIndented = true;
+});
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Origin",
+        builder =>
+        {
+            builder
+            //.WithOrigins("https://localhost:'specific url side client'")
+            .AllowAnyOrigin()
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
 var app = builder.Build();
 
 
@@ -31,5 +53,7 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors("Origin");
 
 app.Run();
