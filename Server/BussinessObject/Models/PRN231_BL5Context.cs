@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Configuration;
 
 namespace BussinessObject.Models
 {
@@ -37,10 +38,10 @@ namespace BussinessObject.Models
                 if (!optionsBuilder.IsConfigured)
                 {
                     var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-                    optionsBuilder.UseSqlServer(config.GetConnectionString("MyConStr"));
+                    optionsBuilder.UseSqlServer(config.GetConnectionString("DB"));
                 }
             }
-
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Activity>(entity =>

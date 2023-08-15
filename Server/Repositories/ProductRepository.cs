@@ -24,32 +24,26 @@ namespace Repositories
 
         public void SaveProductVariant(ProductVariant variant)
         {
-            try
-            {
-                using (var context = new PRN231_BL5Context())
-                {
-                    context.ProductVariants.Add(variant);
-                    context.SaveChanges();
-                }
-            }catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            
         }
+
+        public List<ProductVariant> SearchFilterByCategory(int categoryId) => ProductService.searchFilterByCategory(categoryId);
+
+        public List<ProductVariant> SearchFilterByState(bool deleteFlag) => ProductService.searchFilterByState(deleteFlag);
+        
+
+        public List<ProductVariant> SearchFilterByType(int type) => ProductService.searchFilterByType(type);
+        
+
+        public List<ProductVariant> SearchProduct(string productName) => ProductService.searchProduct(productName);
+        
 
         public void UpdateProductVariant(ProductVariant variant)
         {
-            try
-            {
-                using (var context = new PRN231_BL5Context())
-                {
-                    context.Entry<ProductVariant>(variant).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                    context.SaveChanges();
-                }
-            }catch(Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            
         }
+
+        public void UpdateStatusProduct(bool deleteFlag, int id) => ProductService.UpdateStatusProduct(deleteFlag, id);
+        
     }
 }
