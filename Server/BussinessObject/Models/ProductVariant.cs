@@ -14,9 +14,8 @@ namespace BussinessObject.Models
         public string? CreateBy { get; set; }
         public int? UnitInStock { get; set; }
         public int? UnitInOrder { get; set; }
-        public int SkuId { get; set; }
         public bool? DeleteFlag { get; set; }
-        public string? ProductName { get; set; }
+        public int SkuId { get; set; }
 
         public virtual Product Product { get; set; } = null!;
         public virtual Sku Sku { get; set; } = null!;

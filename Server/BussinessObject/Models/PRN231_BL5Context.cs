@@ -34,10 +34,12 @@ namespace BussinessObject.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=localhost,1433;Initial Catalog=PRN231_BL5;User ID=sa;Password=123");
+                if (!optionsBuilder.IsConfigured)
+                {
+                    var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+                    optionsBuilder.UseSqlServer(config.GetConnectionString("MyConStr"));
+                }
             }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -214,12 +216,16 @@ namespace BussinessObject.Models
 
             modelBuilder.Entity<Position>(entity =>
             {
+                entity.HasIndex(e => e.Address, "Positions_UN")
+                    .IsUnique();
+
                 entity.Property(e => e.PositionId)
                     .ValueGeneratedNever()
                     .HasColumnName("position_id");
 
                 entity.Property(e => e.Address)
-                    .HasColumnType("text")
+                    .HasMaxLength(16)
+                    .IsUnicode(false)
                     .HasColumnName("address");
 
                 entity.Property(e => e.DeleteFlag).HasColumnName("delete_flag");
@@ -238,6 +244,10 @@ namespace BussinessObject.Models
                 entity.Property(e => e.CategoryId).HasColumnName("category_id");
 
                 entity.Property(e => e.DeleteFlag).HasColumnName("delete_flag");
+
+                entity.Property(e => e.ProductName)
+                    .HasMaxLength(255)
+                    .HasColumnName("product_name");
 
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Products)
@@ -263,10 +273,6 @@ namespace BussinessObject.Models
 
                 entity.Property(e => e.ProductId).HasColumnName("product_id");
 
-                entity.Property(e => e.ProductName)
-                    .HasMaxLength(50)
-                    .HasColumnName("product_name");
-
                 entity.Property(e => e.Quality).HasColumnName("quality");
 
                 entity.Property(e => e.SkuId).HasColumnName("sku_id");
@@ -291,7 +297,7 @@ namespace BussinessObject.Models
                     .WithMany(p => p.ProductVariants)
                     .HasForeignKey(d => d.SkuId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Product_variants.sku_id");
+                    .HasConstraintName("FK__Product_v__sku_i__571DF1D5");
             });
 
             modelBuilder.Entity<ProductVariantsSubPositionRelation>(entity =>
@@ -321,9 +327,7 @@ namespace BussinessObject.Models
 
             modelBuilder.Entity<Sku>(entity =>
             {
-                entity.Property(e => e.SkuId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("sku_id");
+                entity.Property(e => e.SkuId).HasColumnName("sku_id");
 
                 entity.Property(e => e.ApproveDate)
                     .HasColumnType("datetime")
@@ -337,11 +341,17 @@ namespace BussinessObject.Models
                     .HasColumnType("datetime")
                     .HasColumnName("create_date");
 
-                entity.Property(e => e.DeleteFlag).HasColumnName("delete_flag");
+                entity.Property(e => e.DeleteFlag)
+                    .HasColumnName("delete_flag")
+                    .HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.Desc)
                     .HasColumnType("text")
                     .HasColumnName("desc");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(256)
+                    .HasColumnName("name");
 
                 entity.Property(e => e.TotalPrice).HasColumnName("total_price");
 
@@ -362,15 +372,15 @@ namespace BussinessObject.Models
                     .HasColumnType("text")
                     .HasColumnName("address");
 
-                entity.Property(e => e.DeleteFlag).HasColumnName("delete_flag");
+                entity.Property(e => e.DeleteFlag)
+                    .HasColumnName("delete_flag")
+                    .HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.Desc)
                     .HasColumnType("text")
                     .HasColumnName("desc");
 
                 entity.Property(e => e.PositionId).HasColumnName("position_id");
-
-                entity.Property(e => e.ProductVariantId).HasColumnName("product_variant_id");
 
                 entity.HasOne(d => d.Position)
                     .WithMany(p => p.SubPositions)

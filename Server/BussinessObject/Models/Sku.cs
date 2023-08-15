@@ -18,6 +18,7 @@ namespace BussinessObject.Models
         public string? CreateBy { get; set; }
         public DateTime? UpdateDate { get; set; }
         public bool? DeleteFlag { get; set; }
+        public string? Name { get; set; }
 
         public virtual ICollection<ProductVariant> ProductVariants { get; set; }
     }
