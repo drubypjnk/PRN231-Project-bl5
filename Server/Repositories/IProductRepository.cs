@@ -16,6 +16,14 @@ namespace Repositories
         void DeleteProductVariant (ProductVariant variant);
 
         List<ProductVariant> GetAllProductVariants ();
-        //List<ProductVariant> SearchProduct(string productName);
+        List<ProductVariant> SearchProduct(string productName);
+
+        List<ProductVariant> SearchFilterByCategory(int categoryId);
+
+        List<ProductVariant> SearchFilterByType(int type);
+
+        List<ProductVariant> SearchFilterByState(bool deleteFlag);
+
+        void UpdateStatusProduct (bool deleteFlag, int id);
     }
 }
