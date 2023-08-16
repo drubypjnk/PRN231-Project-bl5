@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Configuration;
 
 namespace BussinessObject.Models
 {
@@ -35,21 +34,11 @@ namespace BussinessObject.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-<<<<<<< Updated upstream
-                if (!optionsBuilder.IsConfigured)
-                {
-                    var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-                    optionsBuilder.UseSqlServer(config.GetConnectionString("DB"));
-                }
-            }
-        }
-=======
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Data Source=localhost,1433;Initial Catalog=PRN231_BL5;User ID=sa;Password=123");
             }
         }
 
->>>>>>> Stashed changes
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Activity>(entity =>
