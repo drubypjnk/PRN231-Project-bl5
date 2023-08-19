@@ -10,6 +10,8 @@ namespace BussinessObject.Models
         public string? Desc { get; set; }
         public int PositionId { get; set; }
         public bool? DeleteFlag { get; set; }
+        public int? Seat { get; set; }
+        public int? AvailSeat { get; set; }
 
         public virtual Position Position { get; set; } = null!;
     }

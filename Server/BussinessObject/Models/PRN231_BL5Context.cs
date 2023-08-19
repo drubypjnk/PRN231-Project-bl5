@@ -226,11 +226,17 @@ namespace BussinessObject.Models
                     .IsUnicode(false)
                     .HasColumnName("address");
 
-                entity.Property(e => e.DeleteFlag).HasColumnName("delete_flag");
+                entity.Property(e => e.AvailSeat).HasColumnName("avail_seat");
+
+                entity.Property(e => e.DeleteFlag)
+                    .HasColumnName("delete_flag")
+                    .HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.Desc)
                     .HasColumnType("text")
                     .HasColumnName("desc");
+
+                entity.Property(e => e.Seat).HasColumnName("seat");
             });
 
             modelBuilder.Entity<Product>(entity =>
@@ -370,6 +376,8 @@ namespace BussinessObject.Models
                     .HasColumnType("text")
                     .HasColumnName("address");
 
+                entity.Property(e => e.AvailSeat).HasColumnName("avail_seat");
+
                 entity.Property(e => e.DeleteFlag)
                     .HasColumnName("delete_flag")
                     .HasDefaultValueSql("((0))");
@@ -379,6 +387,8 @@ namespace BussinessObject.Models
                     .HasColumnName("desc");
 
                 entity.Property(e => e.PositionId).HasColumnName("position_id");
+
+                entity.Property(e => e.Seat).HasColumnName("seat");
 
                 entity.HasOne(d => d.Position)
                     .WithMany(p => p.SubPositions)

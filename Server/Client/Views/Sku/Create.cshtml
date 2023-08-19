@@ -2,4 +2,37 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+     Layout = "_Layout";
+         <link rel="stylesheet" href="~/css/sku-create.css" asp-append-version="true" />
 }
+ <div class="container">
+      <div class="container header nav_bar_container">
+           <div class="container__row search__container">
+                <h2>Create SKU</h2>
+            </div>
+      </div>
+      <div class="container content__container col-10">
+          <form class="col-10">
+              <div class="container__row">
+                  <div class="col-6">
+                      <label>Name</label>
+                      <input type="text" class="form-control" name="name"/>
+                  </div>
+                  <div class="col-6">
+                      <label>Desc</label>
+                      <input type="text" class="form-control" name="desc"/>
+                  </div>
+              </div>
+               <div class="container__row">
+                 <div class="col-6">
+                      <label>Create Date</label>
+                      <input type="date" class="form-control" name="createDate" readonly/>
+                  </div>
+                  <div class="col-6">
+                      <label>Products</label>
+                      <input type="text" class="form-control" name="desc"/>
+                  </div>
+              </div>
+          </form>
+      </div>
+ </div>

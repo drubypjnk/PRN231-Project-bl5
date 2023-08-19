@@ -15,6 +15,8 @@ namespace BussinessObject.Models
         public string? Address { get; set; }
         public string? Desc { get; set; }
         public bool? DeleteFlag { get; set; }
+        public int? Seat { get; set; }
+        public int? AvailSeat { get; set; }
 
         public virtual ICollection<Category> Categories { get; set; }
         public virtual ICollection<SubPosition> SubPositions { get; set; }
