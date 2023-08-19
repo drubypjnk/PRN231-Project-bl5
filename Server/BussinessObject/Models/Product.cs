@@ -14,6 +14,7 @@ namespace BussinessObject.Models
         public int? CategoryId { get; set; }
         public bool? DeleteFlag { get; set; }
         public string? ProductName { get; set; }
+        public string? Img { get; set; }
 
         public virtual Category? Category { get; set; }
         public virtual ICollection<ProductVariant> ProductVariants { get; set; }

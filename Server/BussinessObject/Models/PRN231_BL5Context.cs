@@ -249,6 +249,10 @@ namespace BussinessObject.Models
 
                 entity.Property(e => e.DeleteFlag).HasColumnName("delete_flag");
 
+                entity.Property(e => e.Img)
+                    .HasColumnType("text")
+                    .HasColumnName("img");
+
                 entity.Property(e => e.ProductName)
                     .HasMaxLength(255)
                     .HasColumnName("product_name");
