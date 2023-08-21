@@ -107,3 +107,6 @@ i:hover{
     opacity:0.5;
     cursor:pointer;
 }
+.paginate_button{
+    font-size:14px !important;
+}

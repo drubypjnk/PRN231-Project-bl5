@@ -1,38 +1,382 @@
 ﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+	For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-     Layout = "_Layout";
-         <link rel="stylesheet" href="~/css/sku-create.css" asp-append-version="true" />
+	Layout = "_Layout";
+	<link rel="stylesheet" href="~/css/sku-create.css" asp-append-version="true" />
+	//<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 }
- <div class="container">
-      <div class="container header nav_bar_container">
-           <div class="container__row search__container">
-                <h2>Create SKU</h2>
-            </div>
-      </div>
-      <div class="container content__container col-10">
-          <form class="col-10">
-              <div class="container__row">
-                  <div class="col-6">
-                      <label>Name</label>
-                      <input type="text" class="form-control" name="name"/>
-                  </div>
-                  <div class="col-6">
-                      <label>Desc</label>
-                      <input type="text" class="form-control" name="desc"/>
-                  </div>
-              </div>
-               <div class="container__row">
-                 <div class="col-6">
-                      <label>Create Date</label>
-                      <input type="date" class="form-control" name="createDate" readonly/>
-                  </div>
-                  <div class="col-6">
-                      <label>Products</label>
-                      <input type="text" class="form-control" name="desc"/>
-                  </div>
-              </div>
-          </form>
-      </div>
- </div>
+<div class="container">
+	<div class="container header nav_bar_container">
+		<div class="container__row search__container">
+			<h2>Create SKU</h2>
+		</div>
+	</div>
+	<div class="container content__container col-10">
+		<form class="col-10">
+			<div class="container__row">
+				<div class="col-6">
+					<label>Name</label>
+					<input type="text" class="form-control" name="name" />
+				</div>
+				<div class="col-6">
+					<label>Desc</label>
+					<input type="text" class="form-control" name="desc" />
+				</div>
+			</div>
+			<div class="container__row">
+				<div class="col-6">
+					<label>Create Date</label>
+					<input type="date" class="form-control" name="createDate" readonly />
+				</div>
+				<div class="col-6">
+					<label>Products</label>
+
+				</div>
+			</div>
+
+			@*table Product*@
+			<div class="container__row">
+				<div class="table-responsive">
+					<div class="table-wrapper">
+						<div class="table-title">
+							<div class="row">
+								<div class="col-sm-8"><h2>Sku<b>Details</b></h2></div>
+								<div class="col-sm-4 add-new__container">
+
+									<!-- Button trigger modal -->
+									<button type="button" class="btn btn-primary add_exist_btn" data-toggle="modal" data-target="#chooseExist">
+										<i class="fa fa-plus"></i>
+										Add Exist
+									</button>
+
+									@*add new item *@
+									<button type="button" class="btn btn-success add-new " id="add_new_btn">
+										<i class="fa fa-plus"></i>
+										Add New
+									</button>
+									@*<button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New </button>*@
+								</div>
+							</div>
+						</div>
+						<table class="table table-bordered" id="sku_cart_table">
+							<thead>
+								<tr>
+									<th>Product Name</th>
+									<th>Image</th>
+									<th>Category</th>
+									<th>Quantity</th>
+									<th>Unit price</th>
+								</tr>
+							</thead>
+							<tbody>
+
+								<tr>
+									<td>Fran Wilson</td>
+									<td>
+										<div class="img_container">
+											<img src="~/images/products/asus-vivobook-15-x1504va-nj023w-thumb-600x600.jpg"/>
+										</div>
+									</td>
+									<td>(503) 555-9931</td>
+									<td>2</td>
+									<td>100.000</td>
+									<td>
+										<a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
+										<a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+										<a class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
+									</td>
+								</tr>
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+			<!-- Modal -->
+			<div class="modal fade " id="chooseExist" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-xl" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<div class="container">
+								<div class="container header nav_bar_container">
+									<div class="container__row search__container">
+										@*from date*@
+										<div class="select__container">
+											<label> Category</label>
+											<select name="cat_prod" id="cat_prod" class="form-select form-control ">
+												
+											</select>
+										</div>
+										@*from to *@
+										<div class="select__container">
+											<label> Status</label>
+											<select name="status_prod" id="status_prod" class=" form-select form-control">
+												<option value="0" selected>All</option>
+												<option value="1">Alive</option>
+												<option value="2">Delete</option>
+											</select>
+
+										</div>
+									</div>
+
+								</div>
+								<div class="container content__container">
+									<div class="container">
+										<div class="row">
+											<table id="myTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+												<thead>
+													<tr>
+														<th>Product#</th>
+														<th>Product name</th>
+														<th>Images</th>
+														<th>Category</th>
+														<th>Quantity</th>
+														<th>Lastest price</th>
+														<th>Status</th>
+														<th>Action</th>
+													</tr>
+												</thead>
+
+												<tbody>
+													@*  <tr>
+														<td>Tiger Nixon</td>
+														<td>System Architect</td>
+														<td>Edinburgh</td>
+														<td>61</td>
+														<td>2011/04/25</td>
+														<td>
+														<i class="fas fa-trash-alt" style="color: #f90101;"></i>
+														</td>
+														</tr>*@
+
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" id="close_modal_btn" class="btn btn-secondary" data-dismiss="modal">Close</button>
+							<button type="button" id="submit_prod" class="btn btn-primary">Save changes</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script>
+	$.noConflict();
+	jQuery( document ).ready(function( $ ) {
+		 // Initialize DataTable
+			var table = $('#myTable').DataTable();
+
+			getAll();
+			getCategories();
+			function getAll(){
+				var status_filter=$('#status_prod').val() ? $('#status_prod').val() : 0;
+				var cat_filter=$('#cat_prod').val() ? $('#cat_prod').val() : 0;
+				$.ajax({
+				url: `http://localhost:5225/api/Product/getForModal/${cat_filter}/${status_filter}`,
+				method: "GET",
+				success: function (data) {
+					// Đổ dữ liệu vào bảng
+					var table = $("#myTable").DataTable();
+					 table.clear().draw();
+					for (var i = 0; i < data.length; i++) {
+
+						var row = data[i];
+						    var checkboxHtml = '<input type="checkbox" name="choose_prod" id="choose_prod" value="' + row.productId + '"/>';
+
+						table.row.add([
+							row.productId,
+							row.productName,
+							row.img,
+							row.categoryName,
+							row.total,
+							row.lastTestPrice,
+							row.deleteFlag?'Deleted':'Alive',
+							checkboxHtml // Thêm nút sửa/xóa hoặc hành động khác
+						]).draw();
+					}
+				},
+				error: function (error) {
+					console.log("API call failed: " + error);
+				}
+			});
+			}
+
+			 $("#status_prod").on("change", function() {
+				getAll();
+			 });
+
+			  $("#cat_prod").on("change", function() {
+				getAll();
+			 });
+
+			 $("#submit_prod").on("click", function() {
+				var ids=getChooseProd();
+
+				console.log('choose prod',ids);
+						$.ajax({
+						contentType: 'application/json', // Đặt kiểu dữ liệu của yêu cầu thành JSON
+						url: `http://localhost:5225/api/Product/getProductByIds`,
+						data:JSON.stringify(ids),
+						        dataType: 'json',
+						method: "POST",
+						success: function (data) {
+									 // Thêm tùy chọn mới vào thẻ select từ dữ liệu AJAX trả về
+									 fillTableWithData(data);
+									 //close modal
+									 $('#close_modal_btn').click();
+						},
+						error: function (error) {
+							console.log("API call failed: " + error);
+						}
+					});
+			 });
+			 
+
+			 //fill data
+			 function fillTableWithData(data) {
+				var tableBody = $("#sku_cart_table tbody");
+				// Duyệt qua từng sản phẩm trong data và thêm vào bảng
+				for (var i = 0; i < data.length; i++) {
+				
+					var product = data[i];
+					var img_html=`<td><div class="img_container">
+											<img src="~/`
+											+`${product.img}`
+											+`"/></div> </td>`;
+					// Tạo một hàng mới cho sản phẩm
+					var row = $("<tr>");
+					row.append($("<td>").text(product.productName));
+
+					//row.append($("<td>").text(product.img));
+					row.append($(img_html));
+					row.append($("<td>").text(product.categoryName));
+					row.append($("<td>").text(product.total));
+					row.append($("<td>").text(product.lastTestPrice));
+					row.append($('<td><a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a><a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a><a class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a></td>'));
+					// Thêm hàng vào tbody của bảng
+					tableBody.append(row);
+				}
+			}
+
+			 //get choose prod
+			 function getChooseProd(){
+				 var selectedCheckboxes = $("input[name='choose_prod']:checked");
+    
+				// Duyệt qua từng checkbox đã chọn và lấy giá trị của thuộc tính 'value'
+				var selectedValues = [];
+				selectedCheckboxes.each(function() {
+					selectedValues.push($(this).val());
+				});
+				return selectedValues;
+			 }
+
+			 //initial category select
+			 function getCategories(){
+				 $.ajax({
+				url: `http://localhost:5225/api/Category/List`,
+				method: "GET",
+				success: function (data) {
+							 // Thêm tùy chọn mới vào thẻ select từ dữ liệu AJAX trả về
+					$('#cat_prod').append($('<option>', {
+						value: 0,
+						text: 'All'
+					}));
+
+					// Loop qua dữ liệu từ API và thêm tùy chọn cho từng mục
+					$.each(data, function(index, item) {
+						$('#cat_prod').append($('<option>', {
+							value: item.categoryId,
+							text: item.name
+						}));
+					});
+				},
+				error: function (error) {
+					console.log("API call failed: " + error);
+				}
+			});
+			 }
+			 
+
+			 function addRow(){
+				//add new row
+				$('#add_new_btn').click();
+				//fill data
+			 }
+
+	 $('[data-toggle="tooltip"]').tooltip();
+		var actions = $("table td:last-child").html();
+		// Append table with add row form on add new button click
+		$(".add-new").click(function(){
+			$(this).attr("disabled", "disabled");
+			var index = $("table tbody tr:last-child").index();
+			var row = '<tr>' +
+				'<td><input type="text" class="form-control" name="productName" id="productName"></td>' +
+				'<td><input type="text" class="form-control" name="image" id="image"></td>' +
+				'<td><input type="text" class="form-control" name="category" id="category"></td>' +
+				'<td><input type="text" class="form-control" name="quantity" id="quantity"></td>' +
+				'<td><input type="text" class="form-control" name="unitPrice" id="unitPrice"></td>' +
+				'<td class="action_row">' + actions + '</td>' +
+			'</tr>';
+			$("table").append(row);
+			$("table tbody tr").eq(index + 1).find(".add, .edit").toggle();
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+		// Add row on add button click
+		$(document).on("click", ".add", function(){
+			var empty = false;
+			var input = $(this).parents("tr").find('input[type="text"]');
+			input.each(function(){
+				if(!$(this).val()){
+					$(this).addClass("error");
+					empty = true;
+				} else{
+					$(this).removeClass("error");
+				}
+			});
+			$(this).parents("tr").find(".error").first().focus();
+			if(!empty){
+				input.each(function(){
+					$(this).parent("td").html($(this).val());
+				});
+				$(this).parents("tr").find(".add, .edit").toggle();
+				$(".add-new").removeAttr("disabled");
+			}
+		});
+		// Edit row on edit button click
+		$(document).on("click", ".edit", function(){
+			$(this).parents("tr").find("td:not(:last-child)").each(function(){
+				$(this).html('<input type="text" class="form-control" value="' + $(this).text() + '">');
+			});
+			$(this).parents("tr").find(".add, .edit").toggle();
+			$(".add-new").attr("disabled", "disabled");
+		});
+		// Delete row on delete button click
+		$(document).on("click", ".delete", function(){
+			$(this).parents("tr").remove();
+			$(".add-new").removeAttr("disabled");
+		});
+
+
+
+	});
+	// Code that uses other library's $ can follow here.
+</script>

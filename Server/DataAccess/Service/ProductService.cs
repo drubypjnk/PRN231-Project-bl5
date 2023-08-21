@@ -1,4 +1,6 @@
-﻿using BussinessObject.Models;
+﻿using AutoMapper;
+using BussinessObject.DTO;
+using BussinessObject.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,8 +12,19 @@ namespace DataAccess.Service
 {
     public class ProductService
     {
-        public static List<ProductVariant> GetProduct()
-        {
+        private IMapper mapper;
+
+		public ProductService(IMapper mapper)
+		{
+			this.mapper = mapper;
+		}
+
+		public ProductService()
+		{
+		}
+
+		public static List<ProductVariant> GetProduct()
+        {   
             var list = new List<ProductVariant>();
             try
             {
@@ -104,6 +117,7 @@ namespace DataAccess.Service
             }
             return products;
         }
+
 
         public static List<ProductVariant> searchFilterByCategory(int CategoryId)
         {
@@ -225,5 +239,54 @@ namespace DataAccess.Service
                 }
             }
         }
+        
+        public  List<ProductFilterDTO> getForModal(int category, int status)
+		{
+            var context = new PRN231_BL5Context();
+            List<ProductFilterDTO> list = new List<ProductFilterDTO>();
+            List<Product> products = new List<Product>();
+			if (category == 0 && status == 0)
+			{
+                products=context.Products.Include(x => x.Category).Include(x=>x.ProductVariants).ToList();
+			}
+			else if(status == 0) //all status
+			{
+                products= context.Products.Include(x => x.Category).Include(x => x.ProductVariants)
+                    .Where(x=>x.CategoryId==category).ToList();
+            }else if (status == 0)
+			{
+                products = context.Products.Include(x => x.Category).Include(x => x.ProductVariants)
+                  .Where(x => x.DeleteFlag == (status==1)).ToList();
+			}
+			else
+			{
+                products = context.Products.Include(x => x.Category).Include(x => x.ProductVariants)
+                  .Where(x => (x.DeleteFlag == (status == 1))&&x.CategoryId==category).ToList();
+            }
+              list=mapper.Map<List<ProductFilterDTO>>(products);
+            return list;
+		}
+
+        public List<ProductFilterDTO> getProductByIds(List<int> ids)
+        {
+            var context = new PRN231_BL5Context();
+            List<ProductFilterDTO> list = new List<ProductFilterDTO>();
+            List<Product> products = new List<Product>();
+            foreach (int id in ids)
+            {
+                Product? product = context.Products
+                    .Include(x => x.Category)
+                    .Include(x => x.ProductVariants)
+                    .FirstOrDefault(x => x.ProductId == id);
+                if (product != null)
+                {
+                    products.Add(product);
+                }
+            }
+
+            list = mapper.Map<List<ProductFilterDTO>>(products);
+            return list;
+        }
+
     }
 }

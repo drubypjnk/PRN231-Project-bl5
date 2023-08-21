@@ -1,4 +1,10 @@
-﻿.form-control{
+﻿@media (max-width: @screen-xs-min) {
+    .modal-xs {
+        width: @modal-sm;
+    }
+}
+
+.form-control{
     width:320px;
 }
 .container__row{
@@ -15,4 +21,156 @@
 }
 .nav_bar_container {
     margin: 32px 0px 32px 32px;
+}
+
+
+    /*Table*/
+.table-wrapper {
+    width: 100%;
+    margin: 30px auto;
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+}
+
+.table-title {
+    padding-bottom: 10px;
+    margin: 0 0 10px;
+}
+
+    .table-title h2 {
+        margin: 6px 0 0;
+        font-size: 22px;
+    }
+
+    .table-title .add-new {
+        float: right;
+        /*height: 30px;*/
+        /*font-weight: bold;
+        font-size: 12px;*/
+        text-shadow: none;
+        /*min-width: 100px;*/
+        /*border-radius: 50px;
+        line-height: 13px;*/
+    }
+
+        .table-title .add-new i {
+            margin-right: 4px;
+        }
+
+table.table {
+    table-layout: fixed;
+}
+
+    table.table tr th, table.table tr td {
+        border-color: #e9e9e9;
+        word-break: break-all;
+    }
+
+    table.table th i {
+        font-size: 13px;
+        margin: 0 5px;
+        cursor: pointer;
+    }
+
+    table.table th:last-child {
+        width: 100px;
+    }
+
+    table.table td a {
+        cursor: pointer;
+        display: inline-block;
+        margin: 0 5px;
+        min-width: 24px;
+    }
+
+        table.table td a.add {
+            color: #27C46B;
+        }
+
+        table.table td a.edit {
+            color: #FFC107;
+        }
+
+        table.table td a.delete {
+            color: #E34724;
+        }
+
+    table.table td i {
+        font-size: 19px;
+    }
+
+    table.table td a.add i {
+        font-size: 24px;
+        margin-right: -1px;
+        position: relative;
+        top: 3px;
+       
+    }
+
+    table.table .form-control {
+        height: 32px;
+        line-height: 32px;
+        box-shadow: none;
+        border-radius: 2px;
+        width: 100%;
+    }
+
+        table.table .form-control.error {
+            border-color: #f50000;
+        }
+
+    table.table td .add {
+        display: none;
+    }
+.action_row{
+    display:flex;
+}
+
+.add-new__container{
+    display:flex;
+}
+
+    .add-new__container button {
+        height: 41px;
+        font-weight: bold;
+        font-size: 12px;
+        text-shadow: none;
+        border-radius: 8px;
+        line-height: 13px;
+    }
+    .add-new__container button :first-child {
+       margin-right:8px;
+    }
+.add_exist_btn{
+    margin-right:8px;
+}
+.select__container select{
+    margin-right:26px;
+}
+
+.nav_bar_container {
+    /*left: 78px;*/
+    width: calc(100% - 78px);
+    /*margin: 32px;*/
+    background: #dcdcdc;
+    padding: 32px;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    justify-content: space-between;
+}
+select{
+    font-size:14px !important;
+}
+
+.img_container{
+    display:flex;
+    justify-content:center;
+    height:50px;
+    width:50px;
+}
+.img_container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }

@@ -1,4 +1,7 @@
-﻿using BussinessObject.Models;
+﻿using AutoMapper;
+using BussinessObject.DTO;
+using BussinessObject.Models;
+using DataAccess.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repositories;
@@ -9,10 +12,12 @@ namespace Warehouse_Management.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
+        IMapper mapper;
         private IProductRepository _productRepository;
-        public ProductController(IProductRepository productRepository)
+        public ProductController(IProductRepository productRepository, IMapper mapper)
         {
             _productRepository = productRepository;
+            this.mapper = mapper;
         }
 
         [HttpGet("{id}")]
@@ -75,5 +80,32 @@ namespace Warehouse_Management.Controllers
             _productRepository.UpdateStatusProduct(deleteFlag, id);
             return Ok();
         }
+
+        [HttpGet("getForModal/{category}/{status}")]
+        public ActionResult<IEnumerable<ProductFilterDTO>> getForModal(int category,int status)
+        {
+            ProductService productService = new ProductService(mapper);
+
+            List<ProductFilterDTO> products = productService.getForModal(category, status);
+            if (products == null)
+            {
+                return NotFound();
+            }
+            return Ok(products);
+        }
+        [HttpPost("getProductByIds")]
+        public ActionResult<IEnumerable<ProductFilterDTO>> getProductByIds(
+            [FromBody]List<int>ids)
+        {
+            ProductService productService = new ProductService(mapper);
+
+            List<ProductFilterDTO> products = productService.getProductByIds(ids);
+            if (products == null)
+            {
+                return NotFound();
+            }
+            return Ok(products);
+        }
+
     }
 }
