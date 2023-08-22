@@ -24,6 +24,7 @@
 }
 
 
+
     /*Table*/
 .table-wrapper {
     width: 100%;
@@ -31,6 +32,9 @@
     background: #fff;
     padding: 20px;
     box-shadow: 0 1px 1px rgba(0,0,0,.05);
+}
+.table-responsive {
+    min-height: 360px;
 }
 
 .table-title {
@@ -174,3 +178,10 @@ select{
     height: 100%;
     object-fit: contain;
 }
+.btn_submit {
+    height: 40px;
+    width: 100px;
+    font-size: 15px;
+    border-radius: 12px;
+}
+

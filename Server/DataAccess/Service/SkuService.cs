@@ -57,5 +57,29 @@ namespace DataAccess.Service
             return s;
 
         }
+        public string createSku(SkuInforDTO model)
+        {
+            Sku sku =new Sku();
+            sku.CreateDate = model.CreateDate;
+            sku.Name = model.Name;
+            sku.Desc=model.Desc;
+            context.Skus.Add(sku);
+            context.SaveChanges();
+
+            List<ProductVariant> productVariants = new List<ProductVariant>();
+            model.products.ForEach(x =>
+            {
+                ProductVariant p = new ProductVariant();
+                p.SkuId = sku.SkuId;
+                p.ProductId = x.ProductId;
+                p.Quality = x.Quantity;
+                p.UnitPrice = x.UnitPrice;
+                p.UnitInStock = p.Quality;
+                productVariants.Add(p);
+            });
+            context.ProductVariants.AddRange(productVariants);
+            context.SaveChanges();
+            return null;
+        }
     }
 }

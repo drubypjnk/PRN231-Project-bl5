@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BussinessObject.DTO;
 using BussinessObject.Models;
 using DataAccess.Service;
 using Microsoft.AspNetCore.Http;
@@ -23,6 +24,18 @@ namespace Warehouse_Management.Controllers
         public ActionResult<List<SkuDTO>> getAll()
         {
             return service.getAll();
+        }
+
+        [HttpPost("create")]
+        public ActionResult<string> CreateSKU([FromBody] SkuInforDTO model)
+        {
+            try{
+                
+            }catch(Exception e)
+            {
+                return Conflict(e.Message);
+            }
+                return Ok("create sucessfully") ;
         }
     }
 }
