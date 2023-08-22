@@ -35,7 +35,7 @@ namespace BussinessObject.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=localhost,1433;Initial Catalog=PRN231_BL5;User ID=sa;Password=123");
+                optionsBuilder.UseSqlServer("Data Source=DESKTOP-4EMJV8H\\SQLEXPRESS;Initial Catalog=PRN231_BL5;User ID=sa;Password=123456");
             }
         }
 
@@ -436,13 +436,13 @@ namespace BussinessObject.Models
                     .HasColumnName("location");
 
                 entity.Property(e => e.Password)
-                    .HasColumnType("text")
+                    .HasColumnType("nvarchar")
                     .HasColumnName("password");
 
                 entity.Property(e => e.Status).HasColumnName("status");
 
                 entity.Property(e => e.Username)
-                    .HasColumnType("text")
+                    .HasColumnType("nvarchar")
                     .HasColumnName("username");
             });
 

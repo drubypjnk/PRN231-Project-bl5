@@ -1,0 +1,78 @@
+﻿@{
+	Layout = "_Layout";
+	<link rel="stylesheet" href="~/css/sku-list.css" asp-append-version="true" />
+}
+
+<div class="container">
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Employee
+			</div>
+			<div class="panel-body">
+				<table class="table table-condensed table-striped">
+					<thead>
+						<tr>
+							<th></th>
+							<th>Product Id</th>
+							<th>Category Id</th>
+							<th>Product Name</th>
+							<th>img</th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<tr data-toggle="collapse" data-target="#demo1" class="accordion-toggle">
+							<td><button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open"></span></button></td>
+							<td>Carlos</td>
+							<td>Mathias</td>
+							<td>Leme</td>
+							<td>SP</td>
+							
+						</tr>
+
+						<tr>
+							<td colspan="12" class="hiddenRow">
+								<div class="accordian-body collapse" id="demo1">
+									<table class="table table-striped">
+										<thead>
+											<tr class="info">
+												<th>ProductVariantID</th>
+												<th>Unit Price</th>
+												<th>Quality</th>
+												<th>Create Date</th>
+												<th>Update Date</th>
+												<th>Create By</th>
+												<th>Unit In Stock</th>
+												<th>Unit In Order</th>
+											</tr>
+										</thead>
+
+										<tbody>
+
+											<tr data-toggle="collapse" class="accordion-toggle" data-target="#demo10">
+												<td> <a href="#">Enginner Software</a></td>
+												<td>Google</td>
+												<td>U$8.00000 </td>
+												<td> 2016/09/27</td>
+												<td> 2017/09/27</td>
+												<td> 2017/09/27</td>
+												<td> 2017/09/27</td>
+												<td> 2017/09/27</td>
+											</tr>											
+										
+										</tbody>
+									</table>
+
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+		</div>
+
+	</div>
+</div>
+
