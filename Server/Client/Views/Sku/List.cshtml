@@ -69,6 +69,7 @@ jQuery( document ).ready(function( $ ) {
         $.ajax({
         url: "http://localhost:5225/api/Sku",
         method: "GET",
+                headers: { "Authorization": 'Bearer ' + localStorage.getItem('token') },
         success: function (data) {
             // Đổ dữ liệu vào bảng
             var table = $("#myTable").DataTable();

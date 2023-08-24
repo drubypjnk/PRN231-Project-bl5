@@ -287,6 +287,41 @@ namespace DataAccess.Service
             list = mapper.Map<List<ProductFilterDTO>>(products);
             return list;
         }
+        public static List<SubPosition>  getPositions( int categoryId,int? quantity)
+        {
+            var context = new PRN231_BL5Context();
+            Category? category= context.Categories.Include(s => s.Position).FirstOrDefault(x => x.CategoryId == categoryId);
+            List<SubPosition> positions = category.Position.SubPositions.Where(s=>s.AvailSeat>0).OrderByDescending(x=>x.AvailSeat).ToList();
+            
+            List<SubPosition> selectedPositions = new List<SubPosition>();
+           
+                // Tìm n position >= quantity
+                int? n = quantity;
+                int count = 0;
+                foreach (SubPosition position in positions)
+                {
+                    if (position.AvailSeat <= quantity&&quantity>0)
+                    {
+                        selectedPositions.Add(position);
+                        count++;
+                        quantity -= position.AvailSeat;
+                        SubPosition? p = context.SubPositions.FirstOrDefault(x => x.SubPositionId == position.SubPositionId);
+                        p.AvailSeat=0;
+                      
+                    }
+                    if(position.AvailSeat >= quantity && quantity > 0)
+                    {
+                        quantity = 0;
+                        SubPosition? p = context.SubPositions.FirstOrDefault(x => x.SubPositionId == position.SubPositionId);
+                        p.AvailSeat = position.AvailSeat-quantity;
+                        context.SubPositions.Add(p);
+                } 
 
+                
+            }
+            return selectedPositions;
+
+        }
     }
+    
 }

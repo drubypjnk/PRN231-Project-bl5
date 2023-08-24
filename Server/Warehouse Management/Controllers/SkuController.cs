@@ -2,6 +2,7 @@
 using BussinessObject.DTO;
 using BussinessObject.Models;
 using DataAccess.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,7 @@ namespace Warehouse_Management.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles ="Admin")]
     public class SkuController : ControllerBase
     {
         IMapper mapper;

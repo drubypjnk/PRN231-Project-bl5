@@ -1,5 +1,6 @@
 ﻿using BussinessObject.DTO;
 using BussinessObject.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,40 +24,59 @@ namespace Warehouse_Management.Controllers
 			_configuration = configuration;
 		}
 		private List<User> _users = new List<User>();
-		[HttpPost]
-		public IActionResult Login([FromBody] UserDTO userDTO)
-		{			
-			var u = _context.Users.FirstOrDefault(x=>x.Username == userDTO.Username && x.Password == userDTO.Password);
-			if(u != null) 
-			{
-				var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-				var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+        
+		[HttpPost("Login")]
+        public async Task<IActionResult> Login([FromBody] UserDTO userDTO)
+        {
+            var user = await _context.Users
+                .Include(u => u.Roles)
+                .FirstOrDefaultAsync(u => u.Username == userDTO.Username && u.Password == userDTO.Password);
+            if (user == null)
+            {
+                return BadRequest();
+            }
 
-				var tokenOptions = new JwtSecurityToken(
-					_configuration["Jwt:Issuer"],
-					_configuration["Jwt:Issuer"],
-					null,
-					expires: DateTime.Now.AddMinutes(120),
-					signingCredentials: signingCredentials
-					);
-				var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-				return Ok(new { Token = tokenString });
-			}
-			else
-			{
-				return BadRequest();
-			}
-			
-		}
-		[HttpGet]
-		[Authorize]
+            var jwtSection = _configuration.GetSection("JWT");
+            var secretKey = jwtSection["SecretKey"];
+            var key = Encoding.UTF8.GetBytes(secretKey);
+
+            var roles = user.Roles.Select(role => role.RoleName).ToArray();
+            var claims = new List<Claim>
+            {
+                  new Claim(ClaimTypes.Name, user.Username)
+
+             };
+
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.AddHours(1),
+                Audience = "AudienceKey",
+                Issuer = "IssuerKey",
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
+
+            user.Token = tokenString;
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+
+            return Ok(tokenString);
+        }
+        [HttpGet]
+		
 		public IActionResult Get()
 		{
 			return Ok(_context.Users.ToList());
 		}
 
 		[HttpGet("SearchByUserName/{username}")]
-		[Authorize]
+		
 		public IActionResult SearchUser(string username)
 		{
 			var user = new List<User>();
@@ -74,7 +94,7 @@ namespace Warehouse_Management.Controllers
 		}
 
 		[HttpGet("SearchById/{id}")]
-		[Authorize]
+		
 		public IActionResult SearchById(int id)
 		{
 			var user = new List<User>();
@@ -92,7 +112,7 @@ namespace Warehouse_Management.Controllers
 		}
 
 		[HttpPut("{id}/{deleteFlag}")]
-		[Authorize]
+		
 		public IActionResult UpdateDeleteFlag(bool deleteFlag, int id)
 		{
 			using(var context = new PRN231_BL5Context())
@@ -107,5 +127,12 @@ namespace Warehouse_Management.Controllers
 			}
 			return Ok();
 		}
-	}
+
+        [HttpPost("Logout")]
+        public IActionResult Logout()
+        {
+            HttpContext.SignOutAsync();
+            return Ok("Logout successfull");
+        }
+    }
 }

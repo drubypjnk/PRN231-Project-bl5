@@ -26,6 +26,7 @@ namespace BussinessObject.Models
         public virtual DbSet<Product> Products { get; set; } = null!;
         public virtual DbSet<ProductVariant> ProductVariants { get; set; } = null!;
         public virtual DbSet<ProductVariantsSubPositionRelation> ProductVariantsSubPositionRelations { get; set; } = null!;
+        public virtual DbSet<Role> Roles { get; set; } = null!;
         public virtual DbSet<Sku> Skus { get; set; } = null!;
         public virtual DbSet<SubPosition> SubPositions { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
@@ -35,7 +36,7 @@ namespace BussinessObject.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=DESKTOP-4EMJV8H\\SQLEXPRESS;Initial Catalog=PRN231_BL5;User ID=sa;Password=123456");
+                optionsBuilder.UseSqlServer("server=DESKTOP-4EMJV8H\\SQLEXPRESS;database=PRN231_BL5;user=sa;password=123456;TrustServerCertificate=True");
             }
         }
 
@@ -44,7 +45,7 @@ namespace BussinessObject.Models
             modelBuilder.Entity<Activity>(entity =>
             {
                 entity.HasKey(e => e.HistoryId)
-                    .HasName("PK__Activity__096AA2E9C0CB0F13");
+                    .HasName("PK__Activity__096AA2E965126939");
 
                 entity.ToTable("Activity");
 
@@ -93,7 +94,7 @@ namespace BussinessObject.Models
                     .WithMany(p => p.Categories)
                     .HasForeignKey(d => d.PositionId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Category__positi__5070F446");
+                    .HasConstraintName("FK__Category__positi__5165187F");
             });
 
             modelBuilder.Entity<Note>(entity =>
@@ -305,7 +306,7 @@ namespace BussinessObject.Models
                     .WithMany(p => p.ProductVariants)
                     .HasForeignKey(d => d.SkuId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Product_v__sku_i__571DF1D5");
+                    .HasConstraintName("FK__Product_v__sku_i__59063A47");
             });
 
             modelBuilder.Entity<ProductVariantsSubPositionRelation>(entity =>
@@ -331,6 +332,30 @@ namespace BussinessObject.Models
                     .HasForeignKey(d => d.SubPositionId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Product_variants_sub_position_relation.sub_position_id");
+            });
+
+            modelBuilder.Entity<Role>(entity =>
+            {
+                entity.Property(e => e.RoleId).HasColumnName("RoleID");
+
+                entity.Property(e => e.RoleName).HasMaxLength(50);
+
+                entity.HasMany(d => d.Users)
+                    .WithMany(p => p.Roles)
+                    .UsingEntity<Dictionary<string, object>>(
+                        "RolesUser",
+                        l => l.HasOne<User>().WithMany().HasForeignKey("UserId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_RolesUsers_Users"),
+                        r => r.HasOne<Role>().WithMany().HasForeignKey("RolesId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_RolesUsers_Roles"),
+                        j =>
+                        {
+                            j.HasKey("RolesId", "UserId");
+
+                            j.ToTable("RolesUsers");
+
+                            j.IndexerProperty<int>("RolesId").HasColumnName("RolesID");
+
+                            j.IndexerProperty<int>("UserId").HasColumnName("UserID");
+                        });
             });
 
             modelBuilder.Entity<Sku>(entity =>
@@ -436,13 +461,13 @@ namespace BussinessObject.Models
                     .HasColumnName("location");
 
                 entity.Property(e => e.Password)
-                    .HasColumnType("nvarchar")
+                    .HasMaxLength(50)
                     .HasColumnName("password");
 
                 entity.Property(e => e.Status).HasColumnName("status");
 
                 entity.Property(e => e.Username)
-                    .HasColumnType("nvarchar")
+                    .HasMaxLength(50)
                     .HasColumnName("username");
             });
 
