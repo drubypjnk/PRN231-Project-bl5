@@ -1,78 +1,95 @@
 ﻿@{
-	Layout = "_Layout";
-	<link rel="stylesheet" href="~/css/sku-list.css" asp-append-version="true" />
+    Layout = "_Layout";
+    <link rel="stylesheet" href="~/css/sku-list.css" asp-append-version="true" />
 }
 
-<div class="container">
-	<div class="col-md-12">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				Employee
-			</div>
-			<div class="panel-body">
-				<table class="table table-condensed table-striped">
-					<thead>
-						<tr>
-							<th></th>
-							<th>Product Id</th>
-							<th>Category Id</th>
-							<th>Product Name</th>
-							<th>img</th>
-						</tr>
-					</thead>
+<!DOCTYPE html>
+<html>
+<head>  
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" type="text/css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 
-					<tbody>
-						<tr data-toggle="collapse" data-target="#demo1" class="accordion-toggle">
-							<td><button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open"></span></button></td>
-							<td>Carlos</td>
-							<td>Mathias</td>
-							<td>Leme</td>
-							<td>SP</td>
-							
-						</tr>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <style>
+        td img{
+            width:100px;
+            height:100px;
+           object-fit:cover;
+        }
+    </style>
+</head>
+<body>
+    <table id="table1" class="table table-responsive table-hover">
+        <thead>
+            <tr>
+                <th></th>
+                <th>ProductID</th>
+                <th>CategoryID</th>
+                <th>ProductName</th>
+                <th>img</th>
+            </tr>
+        </thead>
+        
+                    
+        <script>
+            $(document).ready(function () {
+                $.ajax({
+                    type: "GET",
+                    headers: { "Authorization": 'Bearer ' + localStorage.getItem('token') },
+                    url: "http://localhost:5225/api/Product/Product",
+                    success: function (data) {
+                        console.log(data);
+                        let order = 1;
+                        $.each(data, function (index, value) {
+                            $('#table1').append(`<tbody>
+                                                                    <tr class="clickable"
+                                                                        data-toggle="collapse"
+                                                                        data-target="#group-of-rows-${order}"
+                                                                        aria-expanded="false" aria-controls="group-of-rows-${order}">
+                                                                        <td>
+                                                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                                                        </td>
+                                                                        <td>${value.productId}</td>
+                                                                        <td>${value.categoryId}</td>
+                                                                        <td>${value.productName}</td>
+                                                                        <td><img src="${value.img}" /></td>
+                                                                    </tr>
+                                                                 </tbody>`
+                            );
+                            $('#table1').append(`<tbody id="group-of-rows-${order}" class= "collapse" > </tbody>`);
+                            $(`#group-of-rows-${order}`).append(`<tr>
+                                                                                        <td>ProductVariantID</td>
+                                                                                        <td>Init Price</td>
+                                                                                        <td>Quality</td>
+                                                                                        <td>Create Date</td>
+                                                                                        <td>Update Date</td>
+                                                                                        <td>Create By</td>
+                                                                                        <td>Unit In Stock</td>
+                                                                                        <td>Unit In Order</td>
+                                                                                    </tr>`);
+                            $.each(value.productVariant, function (i, v) {
+                                $(`#group-of-rows-${order}`).append(` <tr>
+                                                                                        <td>${v.productVariantId}</td>
+                                                                                                    <td>${v.unitPrice}</td>
+                                                                                                    <td>${v.quality}</td>
+                                                                                                                <td>${v.createDate}</td>
+                                                                                                                <td>${v.updateDate}</td>
+                                                                                                                <td>${v.createBy}</td>
+                                                                                                                <td>${v.unitInStock}</td>
+                                                                                                                <td>${v.unitInOrder}</td>
+                                                                                  </tr>`);
+                            });
+                            order++
+                        })
+                    }
+                });
+            });
+        </script>
+        
+    </table>
+    
+</body>
+</html>
 
-						<tr>
-							<td colspan="12" class="hiddenRow">
-								<div class="accordian-body collapse" id="demo1">
-									<table class="table table-striped">
-										<thead>
-											<tr class="info">
-												<th>ProductVariantID</th>
-												<th>Unit Price</th>
-												<th>Quality</th>
-												<th>Create Date</th>
-												<th>Update Date</th>
-												<th>Create By</th>
-												<th>Unit In Stock</th>
-												<th>Unit In Order</th>
-											</tr>
-										</thead>
-
-										<tbody>
-
-											<tr data-toggle="collapse" class="accordion-toggle" data-target="#demo10">
-												<td> <a href="#">Enginner Software</a></td>
-												<td>Google</td>
-												<td>U$8.00000 </td>
-												<td> 2016/09/27</td>
-												<td> 2017/09/27</td>
-												<td> 2017/09/27</td>
-												<td> 2017/09/27</td>
-												<td> 2017/09/27</td>
-											</tr>											
-										
-										</tbody>
-									</table>
-
-								</div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-
-		</div>
-
-	</div>
-</div>
 

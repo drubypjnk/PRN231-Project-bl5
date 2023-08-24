@@ -26,6 +26,7 @@ namespace BussinessObject.Models
         public virtual DbSet<Product> Products { get; set; } = null!;
         public virtual DbSet<ProductVariant> ProductVariants { get; set; } = null!;
         public virtual DbSet<ProductVariantsSubPositionRelation> ProductVariantsSubPositionRelations { get; set; } = null!;
+        public virtual DbSet<Role> Roles { get; set; } = null!;
         public virtual DbSet<Sku> Skus { get; set; } = null!;
         public virtual DbSet<SubPosition> SubPositions { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
@@ -44,7 +45,7 @@ namespace BussinessObject.Models
             modelBuilder.Entity<Activity>(entity =>
             {
                 entity.HasKey(e => e.HistoryId)
-                    .HasName("PK__Activity__096AA2E923F2225C");
+                    .HasName("PK__Activity__096AA2E95C3844B5");
 
                 entity.ToTable("Activity");
 
@@ -93,7 +94,7 @@ namespace BussinessObject.Models
                     .WithMany(p => p.Categories)
                     .HasForeignKey(d => d.PositionId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Category__positi__5070F446");
+                    .HasConstraintName("FK__Category__positi__4222D4EF");
             });
 
             modelBuilder.Entity<Note>(entity =>
@@ -305,7 +306,7 @@ namespace BussinessObject.Models
                     .WithMany(p => p.ProductVariants)
                     .HasForeignKey(d => d.SkuId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Product_v__sku_i__5812160E");
+                    .HasConstraintName("FK__Product_v__sku_i__49C3F6B7");
             });
 
             modelBuilder.Entity<ProductVariantsSubPositionRelation>(entity =>
@@ -331,6 +332,30 @@ namespace BussinessObject.Models
                     .HasForeignKey(d => d.SubPositionId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Product_variants_sub_position_relation.sub_position_id");
+            });
+
+            modelBuilder.Entity<Role>(entity =>
+            {
+                entity.Property(e => e.RoleId).HasColumnName("RoleID");
+
+                entity.Property(e => e.RoleName).HasMaxLength(50);
+
+                entity.HasMany(d => d.Users)
+                    .WithMany(p => p.Roles)
+                    .UsingEntity<Dictionary<string, object>>(
+                        "RolesUser",
+                        l => l.HasOne<User>().WithMany().HasForeignKey("UserId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_RolesUsers_Users"),
+                        r => r.HasOne<Role>().WithMany().HasForeignKey("RolesId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_RolesUsers_Roles"),
+                        j =>
+                        {
+                            j.HasKey("RolesId", "UserId");
+
+                            j.ToTable("RolesUsers");
+
+                            j.IndexerProperty<int>("RolesId").HasColumnName("RolesID");
+
+                            j.IndexerProperty<int>("UserId").HasColumnName("UserID");
+                        });
             });
 
             modelBuilder.Entity<Sku>(entity =>

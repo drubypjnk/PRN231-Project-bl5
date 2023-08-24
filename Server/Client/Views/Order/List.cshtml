@@ -1,0 +1,107 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "_Layout";
+         <link rel="stylesheet" href="~/css/sku-list.css" asp-append-version="true" />
+}
+        
+
+<div class="container">
+    <div class="container header nav_bar_container">
+        <div class="container__row search__container">
+            @*from date*@
+            <div class="select__container">
+               <label> From Date</label>
+               <input  type="date" id="fromDate" name="fromDate" class="form-control"/>
+            </div>
+            @*from to *@
+             <div class="select__container">
+               <label> From Date</label>
+               <input  type="date" id="fromDate" name="fromDate" class="form-control"/>
+            </div>
+        </div>
+        <div class="container__row search__container">
+          <button class="button__medium btn-primary" onclick="window.location.href='sku/create'">Add New</button>
+        </div>
+    </div>
+    <div class="container content__container">
+        <div class="container">
+          <div class="row">
+                <table id="myTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                  <thead>
+                    <tr>
+                      <th>Order#</th>
+                      <th>Sku Name</th>
+                      <th>Products</th>
+                      <th>Total price</th>
+                      <th>Create Date</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                
+                  <tbody>
+                  @*  <tr>
+                      <td>Tiger Nixon</td>
+                      <td>System Architect</td>
+                      <td>Edinburgh</td>
+                      <td>61</td>
+                      <td>2011/04/25</td>
+                      <td>
+                         <i class="fas fa-trash-alt" style="color: #f90101;"></i>
+                      </td>
+                    </tr>*@
+                   
+                  </tbody>
+                </table>
+          </div>
+        </div>
+
+    </div>
+</div>
+<script>
+$.noConflict();
+jQuery( document ).ready(function( $ ) {
+    // Initialize DataTable
+    var table = $('#myTable').DataTable();
+    getAll();
+    function getAll(){
+        $.ajax({
+        url: "http://localhost:5225/api/Sku",
+        method: "GET",
+        success: function (data) {
+            // Đổ dữ liệu vào bảng
+            var table = $("#myTable").DataTable();
+                table.clear().draw();
+            for (var i = 0; i < data.length; i++) {
+                var row = data[i];
+                 // Tạo chuỗi HTML cho cột "Products"
+                var productsHtml = "";
+                for (var j = 0; j < row.products.length; j++) {
+                    var product = row.products[j];
+                    productsHtml += `<div class="container__row ">
+                    <p class="col-7"> ${product.productName}</p>
+                    <p class="col-2"></p
+                    <p class="col-3">X ${product.quality}</p>
+                    </div>`;
+                }
+                var id_html=`<a href="Sku/detail/${row.skuId}">${row.skuId}</a>`
+                table.row.add([
+                    id_html,
+                    row.name,
+                   productsHtml,
+                    row.totalPrice,
+                    row.createDate,
+                    '<i class="fas fa-trash-alt" style="color: #f90101;"></i>' // Thêm nút sửa/xóa hoặc hành động khác
+                ]).draw();
+            }
+        },
+        error: function (error) {
+            console.log("API call failed: " + error);
+        }
+    });
+    }
+   
+});
+// Code that uses other library's $ can follow here.
+</script>

@@ -1,0 +1,226 @@
+﻿@using BussinessObject.DTO
+@using BussinessObject.Models
+@*
+	For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
+*@
+@{
+
+    Layout = "_Layout";
+    <link rel="stylesheet" href="~/css/sku-create.css" asp-append-version="true" />
+            //<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+}
+@model SkuResDTO
+<div class="container">
+    <input type="hidden" id="id" value="@ViewBag.id"/>
+    <div class="container header nav_bar_container">
+        <div class="container__row search__container">
+            <h2>SKU Detail</h2>
+        </div>
+    </div>
+    <div class="container content__container col-10">
+        <form class="col-10">
+            <div class="container__row">
+                <div class="col-6">
+                    <label>Name</label>
+                    <input type="text" class="form-control" name="name" value="@Model.Name" id="name"/>
+                </div>
+                <div class="col-6">
+                    <label>Desc</label>
+                    <input type="text" class="form-control" name="desc" id="desc" value="@Model.Desc"/>
+                </div>
+            </div>
+            <div class="container__row">
+                <div class="col-6">
+                    <label>Create Date</label>
+                    <input type="datetime" class="form-control" name="createDate" value="@Model.CreateDate" id="createDateTimeField" readonly />
+                </div>
+                <div class="col-6">
+                    @*<label>Products</label>*@
+
+                </div>
+            </div>
+
+
+            @*table Product*@
+            <div class="container__row">
+                <div class="table-responsive">
+                    <div class="table-wrapper">
+                        <div class="table-title">
+                            <div class="row">
+                                <div class="col-sm-8"><h2>Sku<b>Details</b></h2></div>
+                                <div class="col-sm-4 add-new__container">
+
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-primary add_exist_btn" data-toggle="modal" data-target="#chooseExist">
+                                        <i class="fa fa-plus"></i>
+                                        Add Exist
+                                    </button>
+
+                                    @*add new item *@
+                                    <button type="button" class="btn btn-success add-new " id="add_new_btn">
+                                        <i class="fa fa-plus"></i>
+                                        Add New
+                                    </button>
+                                    @*<button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New </button>*@
+                                </div>
+                            </div>
+                        </div>
+                            <table class="table table-bordered" id="sku_cart_table">
+                                <thead>
+                                    <tr>
+                                        <th>Product Id</th>
+                                        <th>Product Name</th>
+                                        <th>Image</th>
+                                        <th>Category</th>
+                                        <th>Quantity</th>
+                                        <th>Unit price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                        @foreach(ProductInforDTO p in Model.Products)
+                        {
+                                    <tr>
+                                        <td>@p.ProductId</td>
+                                        <td>@p.ProductName</td>
+                                        <td>
+                                            <div class="img_container">
+                                               <image src="/@p.Image" alt="@p.ProductName" /> 
+                                            </div>
+                                        </td>
+                                        <td>@p.Category</td>
+                                        <td>@p.Quantity</td>
+                                        <td>
+                                            @(String.Format("{0:0,00}", p.UnitPrice)) đ
+                                            </td>
+                                        <td>
+                                            <a class="add" title="Add" ><i class="material-icons">&#xE03B;</i></a>
+                                            <a class="edit" title="Edit"  data-toggle="modal" data-target="#editProduct" data-productid="@p.ProductId" ><i class="material-icons">&#xE254;</i></a>
+                                            <a class="delete" title="Delete" ><i class="material-icons">&#xE872;</i></a>
+                                        </td>
+                                    </tr>
+                        }
+
+                                </tbody>
+                            </table>
+                            
+                    </div>
+                </div>
+            </div>
+
+            @*total *@
+           <div class="container__row">
+                <div class="col-10">
+                  
+                </div>
+                <div class="col-2">
+                    @*<label>Products</label>*@
+                    <h5>Total:</h5>
+                    <h4 id="total_price" class="total_price"> @(String.Format("{0:0,00}", @Model.TotalPrice)) đ   </h4>
+                </div>
+            </div>
+
+
+            <!-- Modal -->
+            <div class="modal fade " id="editProduct" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container">
+                                <div class="container header nav_bar_container">
+                                  <h4>Edit products</h4>
+                                </div>
+                                <div class="container content__container">
+                                    <div class="container">
+                                        <div class="col-4">
+                                            <label>Quantity</label>
+                                            <input type="number" id="quantity-prod" class="form-control" />
+                                        </div>
+                                           <div class="col-4">
+                                            <label>Unit Price</label>
+                                            <input id="price-prod" type="text" class="form-control" />
+                                        </div>
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="close_modal_btn" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" id="submit-prod" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+          
+        </form>
+    </div>
+</div>
+
+<script>
+    $.noConflict();
+    jQuery(document).ready(function($) {
+
+        var selected=0;
+         $('.edit').on('click', function () {
+         selected = $(this).data('productid');
+        console.log('Selected Product Id:', selected);
+    });
+
+         $('#submit-prod').on('click', function () {
+         
+            quantity=$('#quantity-prod').val();
+            price=$('#price-prod').val();
+                const sku={   "skuId":$('#id').val(),
+                              "productId": selected,
+                              "quantity": quantity,
+                              "price": price
+                            }
+
+             $.ajax({
+                contentType: 'application/json', // Đặt kiểu dữ liệu của yêu cầu thành JSON
+                url: `http://localhost:5225/api/Sku/edit-detail`,
+                data: JSON.stringify(sku),
+                dataType: 'json',
+                method: "POST",
+                success: function(data) {
+                    console.log("API call success: ");
+                    location.reload();
+
+                },
+                error: function(error) {
+                     @*alert("Update Failed!")*@
+                    console.log("API call failed: " + error);
+                }
+            });
+                    $.toast({
+                    heading: 'Update Success',
+                    position: 'bottom-right',
+                    text: 'Your Sku have updated !',
+                    showHideTransition: 'slide',
+                    icon: 'success'
+                });
+                alert("Update Successfully!")
+                location.reload();
+
+        console.log(extractedData);
+
+        console.log('Selected Product Id:',selected,quantity,price);
+    });
+
+
+
+    });
+        // Code that uses other library's $ can follow here.
+</script>

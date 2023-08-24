@@ -10,6 +10,7 @@ namespace BussinessObject.Models
             Activities = new HashSet<Activity>();
             Notes = new HashSet<Note>();
             Orders = new HashSet<Order>();
+            Roles = new HashSet<Role>();
         }
 
         public int UserId { get; set; }
@@ -25,9 +26,12 @@ namespace BussinessObject.Models
         public string? Avatar { get; set; }
         public bool? IsPrivate { get; set; }
         public bool? DeleteFlag { get; set; }
+        public string? Token { get; set; }
 
         public virtual ICollection<Activity> Activities { get; set; }
         public virtual ICollection<Note> Notes { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
+
+        public virtual ICollection<Role> Roles { get; set; }
     }
 }

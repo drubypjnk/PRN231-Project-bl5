@@ -2,6 +2,7 @@
 using BussinessObject.DTO;
 using BussinessObject.Models;
 using DataAccess.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ namespace Warehouse_Management.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+	//[Authorize(Roles ="Admin")]
     public class ProductController : ControllerBase
     {
         IMapper mapper;
@@ -20,6 +22,37 @@ namespace Warehouse_Management.Controllers
             _productRepository = productRepository;
             this.mapper = mapper;
         }
+
+		[HttpGet("Product")]
+		public IActionResult Get() 
+		{
+			using(var context = new PRN231_BL5Context())
+			{
+				var list = context.Products.Include(p => p.ProductVariants).Include(a => a.Category).ThenInclude(c => c.Position).Select(p => new
+				{
+					ProductId = p.ProductId,
+					CategoryId = p.CategoryId,
+					ProductName = p.ProductName,
+					img = p.Img,
+					ProductVariant = p.ProductVariants.Select(p => new
+					{
+                        ProductVariantId = p.ProductVariantId,
+                        ProductId = p.ProductId,
+                        UnitPrice = p.UnitPrice,
+                        Quality = p.Quality,
+                        CreateBy = p.CreateBy,
+                        CreateDate = p.CreateDate,
+                        UpdateDate = p.UpdateDate,
+                        UnitInOrder = p.UnitInOrder,
+                        UnitInStock = p.UnitInStock,
+                        DeleteFlag = p.DeleteFlag,
+                        SkuId = p.SkuId,
+                        Position = p.Product.Category.Position.Address
+                    })
+				}).ToList();
+                return Ok(list);
+            }			
+		}
 
 		[HttpGet("{id}")]
 		public IActionResult GetProductById(int id)
