@@ -7,6 +7,7 @@ namespace BussinessObject.Models
     {
         public ProductVariant()
         {
+            OrderDetails = new HashSet<OrderDetail>();
             ProductVariantsSubPositionRelations = new HashSet<ProductVariantsSubPositionRelation>();
         }
 
@@ -24,6 +25,7 @@ namespace BussinessObject.Models
 
         public virtual Product Product { get; set; } = null!;
         public virtual Sku Sku { get; set; } = null!;
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
         public virtual ICollection<ProductVariantsSubPositionRelation> ProductVariantsSubPositionRelations { get; set; }
     }
 }

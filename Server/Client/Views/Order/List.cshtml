@@ -22,7 +22,7 @@
             </div>
         </div>
         <div class="container__row search__container">
-          <button class="button__medium btn-primary" onclick="window.location.href='sku/create'">Add New</button>
+          <button class="button__medium btn-primary" onclick="window.location.href='/order/create'">Add New</button>
         </div>
     </div>
     <div class="container content__container">
@@ -32,10 +32,10 @@
                   <thead>
                     <tr>
                       <th>Order#</th>
-                      <th>Sku Name</th>
-                      <th>Products</th>
-                      <th>Total price</th>
+                      <th>Author</th>
+                      <th>Product</th>
                       <th>Create Date</th>
+                      <th>Total price</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -85,7 +85,7 @@ jQuery( document ).ready(function( $ ) {
                     <p class="col-3">X ${product.quality}</p>
                     </div>`;
                 }
-                var id_html=`<a href="Sku/detail/${row.skuId}">${row.skuId}</a>`
+                var id_html=`<a href="Order/detail/${row.skuId}">${row.skuId}</a>`
                 table.row.add([
                     id_html,
                     row.name,

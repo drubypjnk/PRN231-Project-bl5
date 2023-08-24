@@ -219,5 +219,53 @@ namespace DataAccess.Service
             }
             return true;
         }
+
+        public Boolean createOrder(List<ProductInforDTO> model)
+        {
+            try
+            {
+
+                DateTime currentDateTime = DateTime.Now;
+
+                Order order = new Order();
+                order.UserId = 1;
+                order.CreateDate = currentDateTime;
+
+                int? total = 0;
+                foreach (ProductInforDTO product in model)
+                {
+                    total += (product.Quantity * product.UnitPrice);
+                }
+                order.TotalPrice = total;
+
+                context.Orders.Add(order);
+                context.SaveChanges();
+
+
+                //add order detail
+
+                List<OrderDetail> ods = new List<OrderDetail>();
+                foreach (ProductInforDTO product in model)
+                {
+                    ProductVariant? productVariant = context.ProductVariants.OrderByDescending(x=>x.CreateDate).FirstOrDefault(x => x.ProductId == product.ProductId);
+                    productVariant.UnitInOrder += product.Quantity;
+                    productVariant.UnitInStock -= product.Quantity;
+                    context.SaveChanges();
+                    OrderDetail od = new OrderDetail();
+                    od.OrderId = order.OrderId;
+                    od.ProductVariantId = productVariant.ProductId;
+                    od.Quantity = product.Quantity;
+                    od.Price = product.UnitPrice;
+                    ods.Add(od);
+                }
+                context.OrderDetails.AddRange(ods);
+                context.SaveChanges();
+            }catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message); 
+                return false;
+            }
+            return true;
+        }
     }
 }

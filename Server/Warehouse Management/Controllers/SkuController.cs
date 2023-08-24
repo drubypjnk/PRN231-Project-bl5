@@ -69,5 +69,29 @@ namespace Warehouse_Management.Controllers
             }
         }
 
+        [HttpPost("createOrder")]
+        public ActionResult<string> createOrder([FromBody] OrderInforDTO model)
+        {
+            try
+            {
+
+                Boolean check = service.createOrder(model.Products);
+                if (check)
+                {
+                    return Ok("OK");
+                }
+                else
+                {
+                    return Conflict("create failed !");
+
+                }
+            }
+            catch (Exception e)
+            {
+                return Conflict(e.Message);
+            }
+            return Ok("create sucessfully");
+        }
+
     }
 }

@@ -142,8 +142,6 @@ namespace BussinessObject.Models
 
                 entity.Property(e => e.DeleteFlag).HasColumnName("delete_flag");
 
-                entity.Property(e => e.OrderTypeId).HasColumnName("order_type_id");
-
                 entity.Property(e => e.TotalPrice).HasColumnName("total_price");
 
                 entity.Property(e => e.UpdateDate)
@@ -151,12 +149,6 @@ namespace BussinessObject.Models
                     .HasColumnName("update_date");
 
                 entity.Property(e => e.UserId).HasColumnName("user_id");
-
-                entity.HasOne(d => d.OrderType)
-                    .WithMany(p => p.Orders)
-                    .HasForeignKey(d => d.OrderTypeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Order.order_type_id");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Orders)
@@ -167,28 +159,31 @@ namespace BussinessObject.Models
 
             modelBuilder.Entity<OrderDetail>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.OrderId, e.ProductVariantId })
+                    .HasName("Order_detail_PK");
 
                 entity.ToTable("Order_detail");
 
-                entity.Property(e => e.IsDelete).HasColumnName("is_delete");
-
                 entity.Property(e => e.OrderId).HasColumnName("order_id");
 
-                entity.Property(e => e.Price).HasColumnName("price");
-
                 entity.Property(e => e.ProductVariantId).HasColumnName("product_variant_id");
+
+                entity.Property(e => e.IsDelete).HasColumnName("is_delete");
+
+                entity.Property(e => e.Price).HasColumnName("price");
 
                 entity.Property(e => e.Quantity).HasColumnName("quantity");
 
                 entity.HasOne(d => d.Order)
-                    .WithMany()
+                    .WithMany(p => p.OrderDetails)
                     .HasForeignKey(d => d.OrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Order_detail.order_id");
 
                 entity.HasOne(d => d.ProductVariant)
-                    .WithMany()
+                    .WithMany(p => p.OrderDetails)
                     .HasForeignKey(d => d.ProductVariantId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Order_detail.product_variant_id");
             });
 
