@@ -10,10 +10,10 @@ namespace BussinessObject.DTO
     {
         public SkuInforDTO()
         {
-            products = new List<ProductInforDTO>();
+           Products = new List<ProductInforDTO>();
         }
 
-        public List<ProductInforDTO> products { get; set; }
+        public List<ProductInforDTO> Products { get; set; }
         public string? Name { get; set; }
         public string? Desc { get; set; }
         public DateTime? CreateDate { get; set; }

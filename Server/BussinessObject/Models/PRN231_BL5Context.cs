@@ -35,7 +35,7 @@ namespace BussinessObject.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=DESKTOP-4EMJV8H\\SQLEXPRESS;Initial Catalog=PRN231_BL5;User ID=sa;Password=123456");
+                optionsBuilder.UseSqlServer("Data Source=localhost,1433;Initial Catalog=PRN231_BL5;User ID=sa;Password=123");
             }
         }
 
@@ -44,7 +44,7 @@ namespace BussinessObject.Models
             modelBuilder.Entity<Activity>(entity =>
             {
                 entity.HasKey(e => e.HistoryId)
-                    .HasName("PK__Activity__096AA2E9C0CB0F13");
+                    .HasName("PK__Activity__096AA2E923F2225C");
 
                 entity.ToTable("Activity");
 
@@ -305,7 +305,7 @@ namespace BussinessObject.Models
                     .WithMany(p => p.ProductVariants)
                     .HasForeignKey(d => d.SkuId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Product_v__sku_i__571DF1D5");
+                    .HasConstraintName("FK__Product_v__sku_i__5812160E");
             });
 
             modelBuilder.Entity<ProductVariantsSubPositionRelation>(entity =>
@@ -436,13 +436,13 @@ namespace BussinessObject.Models
                     .HasColumnName("location");
 
                 entity.Property(e => e.Password)
-                    .HasColumnType("nvarchar")
+                    .HasMaxLength(50)
                     .HasColumnName("password");
 
                 entity.Property(e => e.Status).HasColumnName("status");
 
                 entity.Property(e => e.Username)
-                    .HasColumnType("nvarchar")
+                    .HasMaxLength(50)
                     .HasColumnName("username");
             });
 

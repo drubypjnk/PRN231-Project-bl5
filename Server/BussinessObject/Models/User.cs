@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace BussinessObject.Models
 {
@@ -14,10 +13,8 @@ namespace BussinessObject.Models
         }
 
         public int UserId { get; set; }
-        [Required]       
         public string? Username { get; set; }
-        [Required]		
-		public string? Password { get; set; }
+        public string? Password { get; set; }
         public string? FullName { get; set; }
         public string? Description { get; set; }
         public int? Age { get; set; }

@@ -240,11 +240,33 @@
             rowData["category"] = cells[3].textContent.trim();
 
             // Check for input type text for quantity and price
-            rowData["quantity"] = cells[4].querySelector('input[type="text"]') ? cells[3].querySelector('input[type="text"]').value : cells[3].textContent.trim();
-            rowData["unitPrice"] = cells[5].querySelector('input[type="text"]') ? cells[4].querySelector('input[type="text"]').value : cells[4].textContent.trim();
+            rowData["quantity"] = cells[4].querySelector('input[type="text"]') ? cells[4].querySelector('input[type="text"]').value : cells[4].textContent.trim();
+            rowData["unitPrice"] = cells[5].querySelector('input[type="text"]') ? cells[5].querySelector('input[type="text"]').value : cells[5].textContent.trim();
 
             extractedData.push(rowData);
         }
+                  const name = $("#name").val();
+            const desc = $("#desc").val();
+            const createDate = $("#createDateTimeField").val();
+            const model = {
+                name:name,
+                desc:desc,
+                createDate:createDate,
+                products:extractedData
+            }
+         $.ajax({
+                contentType: 'application/json', // Đặt kiểu dữ liệu của yêu cầu thành JSON
+                url: `http://localhost:5225/api/Sku/create`,
+                data: JSON.stringify(model),
+                dataType: 'json',
+                method: "POST",
+                success: function(data) {
+                    
+                },
+                error: function(error) {
+                    console.log("API call failed: " + error);
+                }
+            });
 
         console.log(extractedData);
         }

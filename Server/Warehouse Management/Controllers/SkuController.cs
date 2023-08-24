@@ -30,7 +30,15 @@ namespace Warehouse_Management.Controllers
         public ActionResult<string> CreateSKU([FromBody] SkuInforDTO model)
         {
             try{
-                
+               Boolean check=service.createSku(model);
+                if (check)
+                {
+                }
+                else
+                {
+                    return Conflict("create failed !");
+
+                }
             }catch(Exception e)
             {
                 return Conflict(e.Message);
