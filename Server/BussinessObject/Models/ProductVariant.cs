@@ -5,6 +5,11 @@ namespace BussinessObject.Models
 {
     public partial class ProductVariant
     {
+        public ProductVariant()
+        {
+            ProductVariantsSubPositionRelations = new HashSet<ProductVariantsSubPositionRelation>();
+        }
+
         public int ProductVariantId { get; set; }
         public int ProductId { get; set; }
         public int? UnitPrice { get; set; }
@@ -19,5 +24,6 @@ namespace BussinessObject.Models
 
         public virtual Product Product { get; set; } = null!;
         public virtual Sku Sku { get; set; } = null!;
+        public virtual ICollection<ProductVariantsSubPositionRelation> ProductVariantsSubPositionRelations { get; set; }
     }
 }

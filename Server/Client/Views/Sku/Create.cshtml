@@ -77,15 +77,15 @@
 
                                 <tr>
                                     <td></td>
-                                    <td>Fran Wilson</td>
+                                    <td></td>
                                     <td>
                                         <div class="img_container">
-                                            <img src="~/images/products/asus-vivobook-15-x1504va-nj023w-thumb-600x600.jpg" />
+                                            
                                         </div>
                                     </td>
-                                    <td>(503) 555-9931</td>
-                                    <td>2</td>
-                                    <td>100.000</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
                                     <td>
                                         <a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
                                         <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
@@ -99,6 +99,16 @@
                 </div>
             </div>
 
+            @*total *@
+      @*     <div class="container__row">
+                <div class="col-10">
+                  
+                </div>
+                <div class="col-2">
+                    <h5>Total:</h5>
+                    <h4 id="total_price" class="total_price">5000</h4>
+                </div>
+            </div>*@
 
 
             <!-- Modal -->
@@ -219,33 +229,34 @@
 
         function demo(){
             let table = document.getElementById("sku_cart_table");
-        let rows = table.getElementsByTagName("tr");
-        let extractedData = [];
+             let rows = table.getElementsByTagName("tr");
+             let extractedData = [];
 
-        for (let i = 1; i < rows.length; i++) { // start from 1 to skip the header
+                for (let i = 1; i < rows.length; i++) { // start from 1 to skip the header
             let cells = rows[i].getElementsByTagName("td");
             let rowData = {};
-
             rowData["ProductId"] = cells[0].textContent.trim();
+            if(!rowData["ProductId"]){
+                rowData["ProductId"]=0;
+            }
             rowData["productName"] = cells[1].textContent.trim();
-
             // Check for input type file for image
-            if (cells[1].querySelector('input[type="file"]')) {
-                rowData["image"] = $(cells[2]).find('input[type="file"]').prop('files');
+            if (cells[2].querySelector('input[type="file"]')) {
+                //rowData["image"] = $(cells[2]).find('input[type="file"]').prop('files');
+                var input = $(cells[2]).find('input[type="file"]')[0];
+                 var file = input.files[0].name;
+                rowData["image"] = file;
             } else {
-                let img = cells[1].querySelector("img");
+                let img = cells[2].querySelector("img");
                 rowData["image"] = img ? img.src : "";
             }
-
             rowData["category"] = cells[3].textContent.trim();
-
             // Check for input type text for quantity and price
-            rowData["quantity"] = cells[4].querySelector('input[type="text"]') ? cells[4].querySelector('input[type="text"]').value : cells[4].textContent.trim();
-            rowData["unitPrice"] = cells[5].querySelector('input[type="text"]') ? cells[5].querySelector('input[type="text"]').value : cells[5].textContent.trim();
-
+            rowData["quantity"] = cells[4].querySelector('input') ? cells[4].querySelector('input').value : cells[4].textContent.trim();
+            rowData["unitPrice"] = cells[5].querySelector('input') ? cells[5].querySelector('input').value : cells[5].textContent.trim();
             extractedData.push(rowData);
         }
-                  const name = $("#name").val();
+            const name = $("#name").val();
             const desc = $("#desc").val();
             const createDate = $("#createDateTimeField").val();
             const model = {
@@ -254,6 +265,7 @@
                 createDate:createDate,
                 products:extractedData
             }
+             
          $.ajax({
                 contentType: 'application/json', // Đặt kiểu dữ liệu của yêu cầu thành JSON
                 url: `http://localhost:5225/api/Sku/create`,
@@ -261,12 +273,22 @@
                 dataType: 'json',
                 method: "POST",
                 success: function(data) {
-                    
+                    console.log("API call success: ");
+                    window.location.href='sku/create';
                 },
                 error: function(error) {
                     console.log("API call failed: " + error);
                 }
             });
+                    $.toast({
+                    heading: 'Update Success',
+                    position: 'bottom-right',
+                    text: 'Your Sku have updated !',
+                    showHideTransition: 'slide',
+                    icon: 'success'
+                });
+                alert("Update Successfully!")
+                window.location.href='http://localhost:5171/sku/';
 
         console.log(extractedData);
         }
@@ -372,6 +394,7 @@
             //const products=getListFromTable();
             demo();
         });
+       
 
         //fill data
         function fillTableWithData(data) {
@@ -473,7 +496,7 @@
             $(this).attr("disabled", "disabled");
             var index = $("table tbody tr:last-child").index();
             var row = '<tr>' +
-                '<td><input type="text" class="form-control" name="id" readonly id="id"></td>' +
+                '<td><input type="text" class="form-control" name="id" readonly value="0" id="id"></td>' +
                 '<td><input type="text" class="form-control" name="productName" id="productName"></td>' +
                 '<td><input type="file" class="form-control" name="image" id="image"></td>' +
                 '<td><input type="text" class="form-control" name="category" id="category"></td>' +
@@ -484,6 +507,7 @@
             $("table").append(row);
             $("table tbody tr").eq(index + 1).find(".add, .edit").toggle();
             $('[data-toggle="tooltip"]').tooltip();
+           
         });
         // Add row on add button click
         $(document).on("click", ".add", function() {
@@ -505,16 +529,16 @@
                 $(this).parents("tr").find(".add, .edit").toggle();
                 $(".add-new").removeAttr("disabled");
             }
+            //updateTotalPrice();
         });
         // Edit row on edit button click
         $(document).on("click", ".edit", function() {
             $(this).parents("tr").find("td:not(:last-child)").each(function() {
                 if (($(this).index() === 2)) {
                   $(this).html('<input type="file" class="form-control" value="' + $(this).text() + '">');
-                }else if($(this).index()>0){
-                  $(this).html('<input type="text" class="form-control" value="' + $(this).text() + '">');
-                }else{
-                    $(this).html('');
+                }
+                else{
+                   $(this).html('<input type="text" class="form-control" value="' + $(this).text() + '">');
                 }
             });
 

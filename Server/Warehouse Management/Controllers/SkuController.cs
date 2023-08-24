@@ -47,5 +47,27 @@ namespace Warehouse_Management.Controllers
             }
                 return Ok("create sucessfully") ;
         }
+        [HttpGet("detail/{id}")]
+        public ActionResult<SkuResDTO> getbyId(int id)
+        {
+           
+            return service.getDetail(id);
+        }
+
+        [HttpPost("edit-detail")]
+        public ActionResult<string> editProd(SkuEditDTO sku)
+        {
+            Boolean check= service.updateProd(sku);
+
+            if (check == true)
+            {
+                return Ok("update successfully");
+            }
+            else
+            {
+                return Conflict("update failed");
+            }
+        }
+
     }
 }

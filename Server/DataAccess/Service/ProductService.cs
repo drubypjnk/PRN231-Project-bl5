@@ -295,7 +295,7 @@ namespace DataAccess.Service
         public static List<SubPosition> getPositions(string categoryName, int? quantity)
         {
             var context = new PRN231_BL5Context();
-            Category? category = context.Categories.Include(s => s.Position).FirstOrDefault(x => x.Name.ToLower().Equals(categoryName.ToLower()));
+            Category? category = context.Categories.Include(s => s.Position).Include(r=>r.Position.SubPositions).FirstOrDefault(x => x.Name!=null&&x.Name.ToLower().Equals(categoryName.ToLower()));
             List<SubPosition> positions = category.Position.SubPositions.Where(s => s.AvailSeat > 0).OrderByDescending(x => x.AvailSeat).ToList();
 
             List<SubPosition> selectedPositions = new List<SubPosition>();
@@ -310,23 +310,62 @@ namespace DataAccess.Service
                     selectedPositions.Add(position);
                     count++;
                     quantity -= position.AvailSeat;
-                    SubPosition? p = context.SubPositions.FirstOrDefault(x => x.SubPositionId == position.SubPositionId);
-                    p.AvailSeat = 0;
+                    //SubPosition? p = context.SubPositions.FirstOrDefault(x => x.SubPositionId == position.SubPositionId);
+                    //p.AvailSeat = 0;
 
                 }
                 if (position.AvailSeat >= quantity && quantity > 0)
                 {
                     quantity = 0;
-                    SubPosition? p = context.SubPositions.FirstOrDefault(x => x.SubPositionId == position.SubPositionId);
-                    p.AvailSeat = position.AvailSeat - quantity;
-                    context.SubPositions.Add(p);
+                    //SubPosition? p = context.SubPositions.FirstOrDefault(x => x.SubPositionId == position.SubPositionId);
+                    //p.AvailSeat = position.AvailSeat - quantity;
+                    //context.SubPositions.Add(p);
+                    selectedPositions.Add(position);
                 }
 
+                if (quantity <= 0)
+                {
+                    break;
+                }
 
             }
             return selectedPositions;
 
         }
+        public static List<Product> AddProductRange(List<ProductInforDTO> pods)
+        {
+            var context = new PRN231_BL5Context();
+            List<Product> products = new List<Product>();
+            //save product
+            pods.ForEach(s =>
+            {
+               Category ? cat= context.Categories.FirstOrDefault(x => x.Name.ToLower().Equals(s.Category.ToLower()));
+                Product p = new Product();
+                p.ProductName = s.ProductName;
+                p.Img = "images/products/"+s.Image;
+                p.CategoryId = cat.CategoryId;
+                products.Add(p);
+            });
+            context.Products.AddRange(products);
+            context.SaveChanges();
+            return products;
+        }
+        public static Product AddProductSku(ProductInforDTO s)
+        {
+            var context = new PRN231_BL5Context();
+            //save product
+            
+                Category? cat = context.Categories.FirstOrDefault(x => x.Name.ToLower().Equals(s.Category.ToLower()));
+                Product p = new Product();
+                p.ProductName = s.ProductName;
+                p.Img = "images/products/" + s.Image;
+                p.CategoryId = cat.CategoryId;
+           
+            context.Products.Add(p);
+            context.SaveChanges();
+            return p;
+        }
+
     }
 
 }

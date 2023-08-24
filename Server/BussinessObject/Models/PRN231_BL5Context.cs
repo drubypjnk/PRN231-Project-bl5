@@ -81,11 +81,11 @@ namespace BussinessObject.Models
                 entity.Property(e => e.DeleteFlag).HasColumnName("delete_flag");
 
                 entity.Property(e => e.Desc)
-                    .HasColumnType("text")
+                    .HasMaxLength(255)
                     .HasColumnName("desc");
 
                 entity.Property(e => e.Name)
-                    .HasColumnType("text")
+                    .HasMaxLength(255)
                     .HasColumnName("name");
 
                 entity.Property(e => e.PositionId).HasColumnName("position_id");
@@ -311,24 +311,25 @@ namespace BussinessObject.Models
 
             modelBuilder.Entity<ProductVariantsSubPositionRelation>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.SubPositionId, e.ProductVariantId })
+                    .HasName("Product_variants_sub_position_relation_PK");
 
                 entity.ToTable("Product_variants_sub_position_relation");
 
-                entity.Property(e => e.DeleteFlag).HasColumnName("delete_flag");
+                entity.Property(e => e.SubPositionId).HasColumnName("sub_position_id");
 
                 entity.Property(e => e.ProductVariantId).HasColumnName("product_variant_id");
 
-                entity.Property(e => e.SubPositionId).HasColumnName("sub_position_id");
+                entity.Property(e => e.DeleteFlag).HasColumnName("delete_flag");
 
                 entity.HasOne(d => d.ProductVariant)
-                    .WithMany()
+                    .WithMany(p => p.ProductVariantsSubPositionRelations)
                     .HasForeignKey(d => d.ProductVariantId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Product_variants_sub_position_relation.product_variant_id");
 
                 entity.HasOne(d => d.SubPosition)
-                    .WithMany()
+                    .WithMany(p => p.ProductVariantsSubPositionRelations)
                     .HasForeignKey(d => d.SubPositionId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Product_variants_sub_position_relation.sub_position_id");
